@@ -1,0 +1,30 @@
+{
+  "name": "Simple-weather-forecast",
+  "author": "muhanstudio",
+  "url": "https://github.com/muhanstudio/siyuan-Simple-weather-forecast",
+  "version": "0.0.2",
+  "minAppVersion": "1.1.1",
+  "displayName": {
+    "default": "Simple-weather-forecast",
+    "zh_CN": "简约天气预报"
+  },
+  "description": {
+    "default": "Simple-weather-forecast",
+    "zh_CN": "简约天气预报"
+  },
+  "readme": {
+    "default": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "funding": {
+    "openCollective": "",
+    "patreon": "",
+    "github": "",
+    "custom": [
+      ""
+    ]
+  },
+  "keywords": [
+    "时钟", "clock"
+  ]
+}
