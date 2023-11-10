@@ -1,1 +1,1 @@
-> Simple-weather-forecast
+> A fine weather forecast pendant

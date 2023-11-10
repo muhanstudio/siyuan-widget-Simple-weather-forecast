@@ -1,16 +1,16 @@
 {
   "name": "Simple-weather-forecast",
   "author": "muhanstudio",
-  "url": "https://github.com/muhanstudio/siyuan-Simple-weather-forecast",
-  "version": "0.0.2",
+  "url": "https://github.com/muhanstudio/siyuan-widget-Simple-weather-forecast",
+  "version": "0.0.3",
   "minAppVersion": "1.1.1",
   "displayName": {
     "default": "Simple-weather-forecast",
     "zh_CN": "简约天气预报"
   },
   "description": {
-    "default": "Simple-weather-forecast",
-    "zh_CN": "简约天气预报"
+    "default": "一个好看的天气预报挂件",
+    "zh_CN": "A fine weather forecast pendant"
   },
   "readme": {
     "default": "README.md",
@@ -25,6 +25,6 @@
     ]
   },
   "keywords": [
-    "时钟", "clock"
+    "天气预报", "weather-forecast"
   ]
 }

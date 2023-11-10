@@ -1,5 +1,152 @@
-<head></head>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div id="he-plugin-standard"></div>
 
-<body>
-    <iframe width="100%" height="100%" frameborder="0" scrolling="no" hspace="0" src="https://i.tianqi.com/?c=code&a=getcode&id=13&py=chongqing&icon=1"></iframe>
-</body>
+    <script>
+      // 获取或设置id和city的对应关系
+      function getIdCityMap() {
+        // 从文件获取 idCityMap
+        return getFileContent("/data/widgets/Simple-weather-forecast/data/data.json");
+      }
+
+      function saveIdCityMap(id, city) {
+        var idCityMap = getIdCityMap();
+        idCityMap[id] = city;
+        // 将 idCityMap 写入文件
+        putFileContent(
+          "/data/widgets/Simple-weather-forecast/data/data.json",
+          JSON.stringify(idCityMap)
+        );
+      }
+
+      // 获取当前页面的id
+      const id =
+        window.frameElement.parentElement.parentElement.getAttribute(
+          "data-node-id"
+        );
+
+      // 判断id是否存在对应的city，如果存在则直接显示界面，否则显示输入框
+      getIdCityMap()
+        .then(function (idCityMap) {
+          var idCityMapJ = {};
+
+          // 使用正则表达式提取键值对中的键和值
+          var regex = /"([^"]+)":"([^"]+)"/g;
+          var match;
+          while ((match = regex.exec(idCityMap)) !== null) {
+            var key = match[1];
+            var value = match[2];
+            idCityMapJ[key] = value;
+          }
+
+          var city = idCityMapJ[id];
+          console.log(city); // 检查 city 变量的值是否正确获取到
+
+          if (city) {
+            loadWeatherWidget(city);
+          } else {
+            showInputBox();
+          }
+        })
+        .catch(function (error) {
+          console.log("获取 idCityMap 出错:", error);
+        });
+
+      // 创建输入框并添加到页面中
+      function showInputBox() {
+        var inputElement = document.createElement("input");
+        inputElement.type = "text";
+        inputElement.style.position = "fixed";
+        inputElement.style.top = "0";
+        inputElement.style.left = "0";
+        inputElement.style.width = "200px";
+        inputElement.style.height = "50px";
+        inputElement.style.zIndex = "9999";
+        inputElement.style.borderRadius = "10px"; // 圆角化的样式
+        inputElement.placeholder = "请输入地区(或城市代码)并回车"; // 提示文字
+        document.body.appendChild(inputElement);
+
+        // 监听输入框的确认事件
+        inputElement.addEventListener("keyup", function (event) {
+          if (event.key === "Enter") {
+            var cityValue = inputElement.value;
+            saveIdCityMap(id, cityValue);
+            inputElement.style.display = "none"; // 隐藏输入框元素或使用 remove 方法移除
+            loadWeatherWidget(cityValue);
+          }
+        });
+      }
+
+      // 加载天气插件
+      function loadWeatherWidget(city) {
+        WIDGET = {
+          CONFIG: {
+            layout: "1",
+            width: "450",
+            height: "150",
+            background: "1",
+            dataColor: "FFFFFF",
+            borderRadius: "10",
+            city: city,
+            key: "e8d552dca3554cdfbb650b0ecdee1bcb",
+          },
+        };
+
+        // 更新显示原本的界面（可以重新加载对应的脚本文件）
+        var scriptElement = document.createElement("script");
+        scriptElement.src =
+          "https://widget.qweather.net/standard/static/js/he-standard-common.js?v=2.0";
+        document.body.appendChild(scriptElement);
+      }
+
+      // 获取文件内容
+      function getFileContent(path) {
+        return fetch("/api/file/getFile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            path: path,
+          }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw new Error("Failed to get file content");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      // 写入文件内容
+      function putFileContent(path, content) {
+        const formData = new FormData();
+        formData.append("path", path);
+        formData.append("file", new Blob([content]));
+
+        return fetch("/api/file/putFile", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("File saved successfully");
+            } else {
+              throw new Error("Failed to save file");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>
